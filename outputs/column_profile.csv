@@ -1,0 +1,22 @@
+﻿file;field;detected_type;rows;populated;missing;completeness_pct;distinct;top_value;top_count;min;mean;median;max
+clients.csv;id_client;text;10;10;0;100.0;9;CLI001;2;;;;
+clients.csv;prenom;text;10;10;0;100.0;10;Camille;1;;;;
+clients.csv;nom;text;10;10;0;100.0;10;Leroy;1;;;;
+clients.csv;age;numeric;10;10;0;100.0;10;29;1;0.0;60.3;42.5;172.0
+clients.csv;email;text;10;9;1;90.0;9;camille.leroy@example.com;1;;;;
+clients.csv;telephone;text;10;10;0;100.0;10;06 12 34 50 01;1;;;;
+clients.csv;ville;text;10;10;0;100.0;10;Lille;1;;;;
+clients.csv;code_postal;numeric;10;10;0;100.0;10;59000;1;59000.0;61156.1;59390.0;75001.0
+clients.csv;type_client;text;10;10;0;100.0;2;Particulier;5;;;;
+clients.csv;date_inscription;text;10;10;0;100.0;10;2025-02-14;1;;;;
+clients.csv;entreprise_exemple;text;10;10;0;100.0;1;Les Saveurs du Nord (entreprise fictive);10;;;;
+produits.csv;id_produit;text;100;100;0;100.0;99;PRD001;2;;;;
+produits.csv;nom_produit;text;100;100;0;100.0;100;Gaufres artisanales;1;;;;
+produits.csv;categorie;text;100;99;1;99.0;20;Épicerie sucrée;13;;;;
+produits.csv;conditionnement;text;100;100;0;100.0;55;sachet 500 g;8;;;;
+produits.csv;prix_unitaire_eur;numeric;100;100;0;100.0;51;4.1;5;-5.2;106.94;4.85;9999.9
+produits.csv;tva_pct;numeric;100;100;0;100.0;3;5.5;90;5.5;7.74;5.5;99.0
+produits.csv;stock_unites;numeric;100;99;1;99.0;70;36.0;3;-12.0;79.42;75.0;158.0
+produits.csv;statut_stock;text;100;100;0;100.0;2;En stock;74;;;;
+produits.csv;type_fournisseur;text;100;100;0;100.0;4;Fournisseur alimentaire;29;;;;
+produits.csv;entreprise_exemple;text;100;100;0;100.0;1;Les Saveurs du Nord (entreprise fictive);100;;;;
