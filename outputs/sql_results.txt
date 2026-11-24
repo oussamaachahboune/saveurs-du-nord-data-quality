@@ -1,0 +1,285 @@
+
+================================================================================
+01_views.sql
+================================================================================
+[ok] v_clients — clients avec colonnes converties
+[ok] v_produits — produits avec colonnes converties
+[ok] v_field_values — format long : une ligne par (fichier, ligne, champ)
+[ok] v_numeric_values — valeurs numériques analysées (âges, prix, TVA, stocks)
+[ok] v_quartiles — Q1, médiane et Q3 par champ numérique
+[ok] v_tukey_bounds — bornes de Tukey [Q1 - 1,5 x IQR ; Q3 + 1,5 x IQR]
+
+================================================================================
+02_profiling.sql
+================================================================================
+
+--- Q13.1 - Volume : nombre de lignes et de colonnes par fichier (2 rows)
+        file  rows_in_file  rows_in_database  column_count file_version         imported_at
+ clients.csv            10                10            11 66ae9e333e5f 2026-11-24T14:50:53
+produits.csv           100               100            10 a53a10d0677d 2026-11-24T14:50:53
+
+--- Q13.2 - Valeurs distinctes et manquantes par champ (21 rows)
+        file              field  row_count  distinct_values  distinct_populated  null_count  empty_string_count  whitespace_only_count  surrounding_spaces_count  completeness_pct
+ clients.csv              email         10               10                   9           0                   1                      0                         0              90.0
+ clients.csv                age         10               10                  10           0                   0                      0                         0             100.0
+ clients.csv        code_postal         10               10                  10           0                   0                      0                         0             100.0
+ clients.csv   date_inscription         10               10                  10           0                   0                      0                         0             100.0
+ clients.csv entreprise_exemple         10                1                   1           0                   0                      0                         0             100.0
+ clients.csv          id_client         10                9                   9           0                   0                      0                         0             100.0
+ clients.csv                nom         10               10                  10           0                   0                      0                         0             100.0
+ clients.csv             prenom         10               10                  10           0                   0                      0                         0             100.0
+ clients.csv          telephone         10               10                  10           0                   0                      0                         0             100.0
+ clients.csv        type_client         10                2                   2           0                   0                      0                         0             100.0
+ clients.csv              ville         10               10                  10           0                   0                      0                         0             100.0
+produits.csv          categorie        100               21                  20           0                   1                      0                         0              99.0
+produits.csv       stock_unites        100               71                  70           0                   1                      0                         0              99.0
+produits.csv    conditionnement        100               55                  55           0                   0                      0                         0             100.0
+produits.csv entreprise_exemple        100                1                   1           0                   0                      0                         0             100.0
+produits.csv         id_produit        100               99                  99           0                   0                      0                         0             100.0
+produits.csv        nom_produit        100              100                 100           0                   0                      0                         0             100.0
+produits.csv  prix_unitaire_eur        100               51                  51           0                   0                      0                         0             100.0
+produits.csv       statut_stock        100                2                   2           0                   0                      0                         0             100.0
+produits.csv            tva_pct        100                3                   3           0                   0                      0                         0             100.0
+produits.csv   type_fournisseur        100                4                   4           0                   0                      0                         0             100.0
+
+--- Q13.3 - Modalités des champs catégoriels (32 rows)
+        file            field                   value  occurrences
+ clients.csv      type_client             Particulier            5
+ clients.csv      type_client           Professionnel            5
+produits.csv        categorie         Épicerie sucrée           13
+produits.csv        categorie                Boissons            9
+produits.csv        categorie                Apéritif            7
+produits.csv        categorie         Coffrets & kits            6
+produits.csv        categorie              Confiserie            6
+produits.csv        categorie      Farines & céréales            6
+produits.csv        categorie     Biscuits & douceurs            5
+produits.csv        categorie        Boissons chaudes            5
+produits.csv        categorie     Huiles & condiments            5
+produits.csv        categorie                Chocolat            4
+produits.csv        categorie    Conserves & terrines            4
+produits.csv        categorie             Fruits secs            4
+produits.csv        categorie          Plats préparés            4
+produits.csv        categorie          Épicerie salée            4
+produits.csv        categorie             Accessoires            3
+produits.csv        categorie             Boulangerie            3
+produits.csv        categorie               Conserves            3
+produits.csv        categorie                Fromages            3
+produits.csv        categorie            Légumineuses            3
+produits.csv        categorie          Cartes cadeaux            2
+produits.csv        categorie                                    1
+produits.csv     statut_stock                En stock           74
+produits.csv     statut_stock            Stock faible           26
+produits.csv          tva_pct                     5.5           90
+produits.csv          tva_pct                    20.0            9
+produits.csv          tva_pct                    99.0            1
+produits.csv type_fournisseur Fournisseur alimentaire           29
+produits.csv type_fournisseur      Artisan partenaire           28
+produits.csv type_fournisseur     Producteur régional           27
+produits.csv type_fournisseur           Atelier local           16
+
+================================================================================
+03_integrity.sql
+================================================================================
+
+--- Q14.1 - Identifiants manquants (NULL, vides ou espaces seuls) (2 rows)
+        file  missing_identifiers
+ clients.csv                    0
+produits.csv                    0
+
+--- Q14.2 - Identifiants clients dupliqués (GROUP BY ... HAVING) (1 rows)
+id_client  occurrences source_rows                       clients
+   CLI001            2         1,2 Camille Leroy / Thomas Dubois
+
+--- Q14.3 - Identifiants produits dupliqués (GROUP BY ... HAVING) (1 rows)
+id_produit  occurrences source_rows                                   produits
+    PRD001            2         1,2 Gaufres artisanales / Spéculoos pur beurre
+
+--- Q14.4 - Synthèse : clés dupliquées et lignes concernées (2 rows)
+        file  duplicated_keys  rows_involved
+ clients.csv                1              2
+produits.csv                1              2
+
+--- Q14.5 - Lignes entièrement dupliquées (toutes les colonnes sauf source_row) (2 rows)
+        file  duplicated_row_groups  rows_involved
+ clients.csv                      0              0
+produits.csv                      0              0
+
+================================================================================
+04_quality_rules.sql
+================================================================================
+[ok] v_rule_violations — une ligne par violation
+[ok] v_anomalies — table de suivi des violations (même format que outputs/anomalies.csv)
+
+--- Q15.1 - Valeurs hors domaine (validité) avec la valeur observée (8 rows)
+   rule_id  row_number identifier             field      observed_value test_result
+CLI-VAL-01           4     CLI004             email hugo.petit@@example        FAIL
+CLI-VAL-02           6     CLI006         telephone               06 12        FAIL
+CLI-VAL-04           5     CLI005               age                 150        FAIL
+CLI-VAL-04           7     CLI007               age                 172        FAIL
+CLI-VAL-05           9     CLI009               age                   0      REVIEW
+PRD-VAL-01          10     PRD010 prix_unitaire_eur                -5.2      REVIEW
+PRD-VAL-02          30     PRD030           tva_pct                99.0        FAIL
+PRD-VAL-03          40     PRD040      stock_unites               -12.0      REVIEW
+
+--- Q15.2 - Incohérences entre champs et anomalies d'exactitude (40 rows)
+   rule_id  row_number identifier                     field test_result
+CLI-COH-01           8     CLI008         ville|code_postal        FAIL
+PRD-COH-01          21     PRD021 stock_unites|statut_stock        FAIL
+PRD-COH-01          40     PRD040 stock_unites|statut_stock        FAIL
+PRD-COH-02           4     PRD004 stock_unites|statut_stock      REVIEW
+PRD-COH-02           7     PRD007 stock_unites|statut_stock      REVIEW
+PRD-COH-02           8     PRD008 stock_unites|statut_stock      REVIEW
+PRD-COH-02          11     PRD011 stock_unites|statut_stock      REVIEW
+PRD-COH-02          16     PRD016 stock_unites|statut_stock      REVIEW
+PRD-COH-02          22     PRD022 stock_unites|statut_stock      REVIEW
+PRD-COH-02          25     PRD025 stock_unites|statut_stock      REVIEW
+PRD-COH-02          27     PRD027 stock_unites|statut_stock      REVIEW
+PRD-COH-02          30     PRD030 stock_unites|statut_stock      REVIEW
+PRD-COH-02          32     PRD032 stock_unites|statut_stock      REVIEW
+PRD-COH-02          34     PRD034 stock_unites|statut_stock      REVIEW
+PRD-COH-02          35     PRD035 stock_unites|statut_stock      REVIEW
+PRD-COH-02          39     PRD039 stock_unites|statut_stock      REVIEW
+PRD-COH-02          43     PRD043 stock_unites|statut_stock      REVIEW
+PRD-COH-02          48     PRD048 stock_unites|statut_stock      REVIEW
+PRD-COH-02          49     PRD049 stock_unites|statut_stock      REVIEW
+PRD-COH-02          52     PRD052 stock_unites|statut_stock      REVIEW
+PRD-COH-02          60     PRD060 stock_unites|statut_stock      REVIEW
+PRD-COH-02          61     PRD061 stock_unites|statut_stock      REVIEW
+PRD-COH-02          63     PRD063 stock_unites|statut_stock      REVIEW
+PRD-COH-02          65     PRD065 stock_unites|statut_stock      REVIEW
+PRD-COH-02          67     PRD067 stock_unites|statut_stock      REVIEW
+PRD-COH-02          73     PRD073 stock_unites|statut_stock      REVIEW
+PRD-COH-02          76     PRD076 stock_unites|statut_stock      REVIEW
+PRD-COH-02          77     PRD077 stock_unites|statut_stock      REVIEW
+PRD-COH-02          88     PRD088 stock_unites|statut_stock      REVIEW
+PRD-COH-02          89     PRD089 stock_unites|statut_stock      REVIEW
+PRD-COH-02          95     PRD095 stock_unites|statut_stock      REVIEW
+PRD-EXA-01          24     PRD024                   tva_pct      REVIEW
+PRD-EXA-02          96     PRD096                   tva_pct      REVIEW
+PRD-EXA-02          97     PRD097                   tva_pct      REVIEW
+PRD-EXA-03           3     PRD003                   tva_pct      REVIEW
+PRD-EXA-03           4     PRD004                   tva_pct      REVIEW
+PRD-EXA-03          63     PRD063                   tva_pct      REVIEW
+PRD-EXA-03          64     PRD064                   tva_pct      REVIEW
+PRD-EXA-03          65     PRD065                   tva_pct      REVIEW
+PRD-EXA-03          66     PRD066                   tva_pct      REVIEW
+
+================================================================================
+05_statistics.sql
+================================================================================
+[ok] v_numeric_stats — statistiques descriptives par champ numérique
+
+--- Q16.1 - Statistiques des âges et des prix (toutes les valeurs numériques) (3 rows)
+        file             field   n   mean    std  min_value   q1  median     q3  max_value
+ clients.csv               age  10  60.30  55.07        0.0 35.0   42.50  48.25      172.0
+produits.csv prix_unitaire_eur 100 106.94 999.33       -5.2  3.8    4.85   6.43     9999.9
+produits.csv      stock_unites  99  79.42  45.77      -12.0 36.0   75.00 116.00      158.0
+
+--- Q16.2 - Moyenne et médiane après exclusion des valeurs invalides (2 rows)
+        file             field  n   mean  median  min_value  max_value
+ clients.csv               age  8  35.13    39.5        0.0       49.0
+produits.csv prix_unitaire_eur 99 108.07     4.9        1.6     9999.9
+
+--- Q17.1 - Catalogue par catégorie (21 rows)
+           categorie  products  avg_price  min_price  max_price  total_stock  missing_stock  low_stock_products
+     Épicerie sucrée        13       4.28       -5.2        7.6        836.0              1                   4
+            Boissons         9       3.69        1.6        5.2        484.0              0                   3
+            Apéritif         7       4.33        3.2        5.9        693.0              0                   1
+     Coffrets & kits         6    1693.07       18.9     9999.9        577.0              0                   2
+          Confiserie         6       5.18        4.5        5.9        333.0              0                   2
+  Farines & céréales         6       3.50        2.4        4.5        507.0              0                   1
+ Biscuits & douceurs         5       4.42        3.6        6.4        274.0              0                   1
+    Boissons chaudes         5       6.84        4.6       12.9        351.0              0                   0
+ Huiles & condiments         5       4.32        3.2        6.9        542.0              0                   2
+            Chocolat         4       4.88        3.3        8.9        447.0              0                   2
+Conserves & terrines         4       5.58        5.2        5.9        317.0              0                   2
+         Fruits secs         4       5.45        4.8        6.2        236.0              0                   0
+      Plats préparés         4       9.72        6.2       12.9        109.0              0                   1
+      Épicerie salée         4       5.53        3.9        7.2        438.0              0                   2
+         Accessoires         3       7.43        3.5        9.9        159.0              0                   1
+         Boulangerie         3       6.30        5.2        7.9        422.0              0                   0
+           Conserves         3       4.00        3.6        4.3        347.0              0                   1
+            Fromages         3       7.40        5.9        8.4        274.0              0                   0
+        Légumineuses         3       3.50        3.2        3.8        277.0              0                   1
+      Cartes cadeaux         2      35.00       20.0       50.0        177.0              0                   0
+    (non renseignée)         1       5.50        5.5        5.5         63.0              0                   0
+
+--- Q17.2 - État des stocks (2 rows)
+statut_stock  products  total_stock  min_stock  max_stock  products_without_stock
+    En stock        74       5718.0      -12.0      158.0                       2
+Stock faible        26       2145.0       19.0      157.0                       0
+
+================================================================================
+06_quality_summary.sql
+================================================================================
+[ok] v_rule_results — une ligne par règle (même format que outputs/rule_results.csv)
+[ok] v_quality_summary — indicateurs par fichier et par dimension
+[ok] v_quality_kpis — indicateurs clés par fichier
+
+--- Q18.1 - Indicateurs clés par fichier (2 rows)
+        file  row_count  column_count  completeness_pct  duplicated_keys  rules_executed  rules_violated  rows_with_errors  clean_rows  clean_rows_pct   run_date file_version
+ clients.csv         10            11              99.1                1              17               8                 9           1            10.0 2026-11-24 66ae9e333e5f
+produits.csv        100            10              99.8                1              16              11                41          59            59.0 2026-11-24 a53a10d0677d
+
+--- Q18.2 - Synthèse par dimension (13 rows)
+        file          dimension  rules_executed  rules_violated  rows_flagged  fail_rows  review_rows  info_rows
+ clients.csv          Intégrité               3               1             2          2            0          0
+ clients.csv         Complétude               2               1             1          0            1          0
+ clients.csv           Validité               7               4             5          4            1          0
+ clients.csv          Cohérence               2               1             1          1            0          0
+ clients.csv            Unicité               2               0             0          0            0          0
+ clients.csv Valeurs aberrantes               1               1             3          0            0          3
+produits.csv          Intégrité               3               1             2          2            0          0
+produits.csv         Complétude               1               1             2          2            0          0
+produits.csv           Validité               4               3             3          1            2          0
+produits.csv          Cohérence               2               2            30          2           28          0
+produits.csv         Exactitude               3               3             9          0            9          0
+produits.csv            Unicité               1               0             0          0            0          0
+produits.csv Valeurs aberrantes               2               1            12          0            0         12
+
+--- Q18.3 - Résultat de chaque règle (33 rows)
+   rule_id                                                                                                      field  rows_violating  violation_rate_pct test_result
+CLI-COH-01                                                                                          ville|code_postal               1                10.0        FAIL
+CLI-COH-02                                                                                           date_inscription               0                 0.0        PASS
+CLI-COM-01                                              prenom|nom|age|ville|code_postal|type_client|date_inscription               0                 0.0        PASS
+CLI-COM-02                                                                                            email|telephone               1                10.0      REVIEW
+CLI-INT-01                                                                                                  id_client               0                 0.0        PASS
+CLI-INT-02                                                                                                  id_client               2                20.0        FAIL
+CLI-INT-03                                                                                                all_columns               0                 0.0        PASS
+CLI-OUT-01                                                                                                        age               3                30.0        INFO
+CLI-UNI-01                                                                                                      email               0                 0.0        PASS
+CLI-UNI-02                                                                                                 prenom|nom               0                 0.0        PASS
+CLI-VAL-01                                                                                                      email               1                10.0        FAIL
+CLI-VAL-02                                                                                                  telephone               1                10.0        FAIL
+CLI-VAL-03                                                                                           date_inscription               0                 0.0        PASS
+CLI-VAL-04                                                                                                        age               2                20.0        FAIL
+CLI-VAL-05                                                                                                        age               1                10.0      REVIEW
+CLI-VAL-06                                                                                                code_postal               0                 0.0        PASS
+CLI-VAL-07                                                                                                type_client               0                 0.0        PASS
+PRD-COH-01                                                                                  stock_unites|statut_stock               2                 2.0        FAIL
+PRD-COH-02                                                                                  stock_unites|statut_stock              28                28.0      REVIEW
+PRD-COM-01 nom_produit|categorie|conditionnement|prix_unitaire_eur|tva_pct|stock_unites|statut_stock|type_fournisseur               2                 2.0        FAIL
+PRD-EXA-01                                                                                                    tva_pct               1                 1.0      REVIEW
+PRD-EXA-02                                                                                                    tva_pct               2                 2.0      REVIEW
+PRD-EXA-03                                                                                                    tva_pct               6                 6.0      REVIEW
+PRD-INT-01                                                                                                 id_produit               0                 0.0        PASS
+PRD-INT-02                                                                                                 id_produit               2                 2.0        FAIL
+PRD-INT-03                                                                                                all_columns               0                 0.0        PASS
+PRD-OUT-01                                                                                          prix_unitaire_eur              12                12.0        INFO
+PRD-OUT-02                                                                                               stock_unites               0                 0.0        PASS
+PRD-UNI-01                                                                                nom_produit|conditionnement               0                 0.0        PASS
+PRD-VAL-01                                                                                          prix_unitaire_eur               1                 1.0      REVIEW
+PRD-VAL-02                                                                                                    tva_pct               1                 1.0        FAIL
+PRD-VAL-03                                                                                               stock_unites               1                 1.0      REVIEW
+PRD-VAL-04                                                                                               statut_stock               0                 0.0        PASS
+
+================================================================================
+07_sql_vs_python.sql
+================================================================================
+
+--- Q19.1 - Règles dont le résultat diffère entre SQL et Python (0 rows)
+(no rows)
+
+--- Q19.2 - Bilan de la comparaison (1 rows)
+ rules_compared  identical_results
+             33                 33
