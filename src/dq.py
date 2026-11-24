@@ -299,6 +299,12 @@ def check_gift_card_vat(df, fields, ctx):
     return df["categorie"].eq("Cartes cadeaux") & rate.gt(0)
 
 
+@rule("PRD-EXA-03")
+def check_confectionery_vat(df, fields, ctx):
+    rate = to_number(df["tva_pct"])
+    return df["categorie"].eq("Confiserie") & rate.notna() & rate.ne(20)
+
+
 # ---------------------------------------------------------------------------
 # Exécution des règles
 # ---------------------------------------------------------------------------
