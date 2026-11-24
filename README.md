@@ -9,7 +9,7 @@ L'objectif est de profiler les données, de distinguer les violations d'intégri
 |---|---|---|
 | 1 | Inventaire et profilage initial | [`notebooks/01_data_profiling.ipynb`](notebooks/01_data_profiling.ipynb) |
 | 2 | Audit d'intégrité | [`notebooks/02_integrity_audit.ipynb`](notebooks/02_integrity_audit.ipynb) |
-| 3 | Audit des dimensions de qualité | à venir |
+| 3 | Audit des dimensions de qualité | [`notebooks/03_quality_dimensions.ipynb`](notebooks/03_quality_dimensions.ipynb), [`outputs/anomalies.csv`](outputs/anomalies.csv) |
 | 4 | Mise en œuvre SQL (SQLite) | à venir |
 | 5 | Mise en œuvre Python / Pandas | à venir |
 | 6 | Tableau de bord (Streamlit) | à venir |

@@ -1,0 +1,71 @@
+﻿rule_id;file;row_number;identifier;dimension;field;rule;observed_value;test_result
+CLI-INT-02;clients.csv;1;CLI001;Intégrité;id_client;Identifiant client unique;'CLI001';FAIL
+CLI-INT-02;clients.csv;2;CLI001;Intégrité;id_client;Identifiant client unique;'CLI001';FAIL
+CLI-COM-02;clients.csv;3;CLI003;Complétude;email;Coordonnées de contact renseignées;'';REVIEW
+CLI-VAL-01;clients.csv;4;CLI004;Validité;email;Format d'e-mail valide;'hugo.petit@@example';FAIL
+CLI-VAL-02;clients.csv;6;CLI006;Validité;telephone;Format de téléphone français valide;'06 12';FAIL
+CLI-VAL-04;clients.csv;5;CLI005;Validité;age;Âge entier compris entre 0 et 120;'150';FAIL
+CLI-VAL-04;clients.csv;7;CLI007;Validité;age;Âge entier compris entre 0 et 120;'172';FAIL
+CLI-VAL-05;clients.csv;9;CLI009;Validité;age;Client majeur;'0';REVIEW
+CLI-COH-01;clients.csv;8;CLI008;Cohérence;ville|code_postal;Code postal cohérent avec la ville;ville='Lens' | code_postal='75001';FAIL
+CLI-OUT-01;clients.csv;5;CLI005;Valeurs aberrantes;age;Âge dans les bornes de Tukey;'150';INFO
+CLI-OUT-01;clients.csv;7;CLI007;Valeurs aberrantes;age;Âge dans les bornes de Tukey;'172';INFO
+CLI-OUT-01;clients.csv;9;CLI009;Valeurs aberrantes;age;Âge dans les bornes de Tukey;'0';INFO
+PRD-INT-02;produits.csv;1;PRD001;Intégrité;id_produit;Identifiant produit unique;'PRD001';FAIL
+PRD-INT-02;produits.csv;2;PRD001;Intégrité;id_produit;Identifiant produit unique;'PRD001';FAIL
+PRD-COM-01;produits.csv;5;PRD005;Complétude;categorie;Champs obligatoires renseignés;'';FAIL
+PRD-COM-01;produits.csv;15;PRD015;Complétude;stock_unites;Champs obligatoires renseignés;'';FAIL
+PRD-VAL-01;produits.csv;10;PRD010;Validité;prix_unitaire_eur;Prix numérique et non négatif;'-5.2';REVIEW
+PRD-VAL-02;produits.csv;30;PRD030;Validité;tva_pct;Taux de TVA légal;'99.0';FAIL
+PRD-VAL-03;produits.csv;40;PRD040;Validité;stock_unites;Stock entier et non négatif;'-12.0';REVIEW
+PRD-COH-01;produits.csv;21;PRD021;Cohérence;stock_unites|statut_stock;Produit sans stock non déclaré disponible;stock_unites='0.0' | statut_stock='En stock';FAIL
+PRD-COH-01;produits.csv;40;PRD040;Cohérence;stock_unites|statut_stock;Produit sans stock non déclaré disponible;stock_unites='-12.0' | statut_stock='En stock';FAIL
+PRD-COH-02;produits.csv;4;PRD004;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='16.0' | statut_stock='En stock';REVIEW
+PRD-COH-02;produits.csv;7;PRD007;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='64.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;8;PRD008;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='9.0' | statut_stock='En stock';REVIEW
+PRD-COH-02;produits.csv;11;PRD011;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='31.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;16;PRD016;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='19.0' | statut_stock='En stock';REVIEW
+PRD-COH-02;produits.csv;22;PRD022;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='49.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;25;PRD025;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='88.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;27;PRD027;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='62.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;30;PRD030;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='157.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;32;PRD032;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='138.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;34;PRD034;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='48.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;35;PRD035;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='106.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;39;PRD039;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='48.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;43;PRD043;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='90.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;48;PRD048;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='40.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;49;PRD049;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='75.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;52;PRD052;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='140.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;60;PRD060;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='154.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;61;PRD061;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='129.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;63;PRD063;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='98.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;65;PRD065;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='23.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;67;PRD067;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='56.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;73;PRD073;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='132.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;76;PRD076;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='75.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;77;PRD077;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='116.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;88;PRD088;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='75.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;89;PRD089;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='84.0' | statut_stock='Stock faible';REVIEW
+PRD-COH-02;produits.csv;95;PRD095;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;stock_unites='48.0' | statut_stock='Stock faible';REVIEW
+PRD-EXA-01;produits.csv;24;PRD024;Exactitude;tva_pct;Boisson sans alcool au taux réduit;'20.0';REVIEW
+PRD-EXA-02;produits.csv;96;PRD096;Exactitude;tva_pct;Carte cadeau sans TVA à l'émission;'20.0';REVIEW
+PRD-EXA-02;produits.csv;97;PRD097;Exactitude;tva_pct;Carte cadeau sans TVA à l'émission;'20.0';REVIEW
+PRD-EXA-03;produits.csv;3;PRD003;Exactitude;tva_pct;Confiserie au taux normal;'5.5';REVIEW
+PRD-EXA-03;produits.csv;4;PRD004;Exactitude;tva_pct;Confiserie au taux normal;'5.5';REVIEW
+PRD-EXA-03;produits.csv;63;PRD063;Exactitude;tva_pct;Confiserie au taux normal;'5.5';REVIEW
+PRD-EXA-03;produits.csv;64;PRD064;Exactitude;tva_pct;Confiserie au taux normal;'5.5';REVIEW
+PRD-EXA-03;produits.csv;65;PRD065;Exactitude;tva_pct;Confiserie au taux normal;'5.5';REVIEW
+PRD-EXA-03;produits.csv;66;PRD066;Exactitude;tva_pct;Confiserie au taux normal;'5.5';REVIEW
+PRD-OUT-01;produits.csv;10;PRD010;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'-5.2';INFO
+PRD-OUT-01;produits.csv;19;PRD019;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'12.9';INFO
+PRD-OUT-01;produits.csv;37;PRD037;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'12.9';INFO
+PRD-OUT-01;produits.csv;38;PRD038;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'10.9';INFO
+PRD-OUT-01;produits.csv;88;PRD088;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'19.9';INFO
+PRD-OUT-01;produits.csv;89;PRD089;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'24.9';INFO
+PRD-OUT-01;produits.csv;90;PRD090;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'9999.9';INFO
+PRD-OUT-01;produits.csv;91;PRD091;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'34.9';INFO
+PRD-OUT-01;produits.csv;92;PRD092;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'59.9';INFO
+PRD-OUT-01;produits.csv;96;PRD096;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'20.0';INFO
+PRD-OUT-01;produits.csv;97;PRD097;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'50.0';INFO
+PRD-OUT-01;produits.csv;100;PRD100;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;'18.9';INFO
