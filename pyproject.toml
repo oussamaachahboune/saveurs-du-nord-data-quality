@@ -1,14 +1,16 @@
 [project]
 name = "saveurs-du-nord-data-quality"
 version = "0.1.0"
-description = "Add your description here"
+description = "Audit d'intégrité et de qualité des données — Les Saveurs du Nord (TP)"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "matplotlib>=3.11.2",
     "pandas>=3.1.0",
 ]
 
 [dependency-groups]
 dev = [
     "ipykernel>=7.4.0",
+    "nbconvert>=7.17.2",
 ]

@@ -11,3 +11,5 @@ wheels/
 
 # Datasets
 data/
+# Generated database
+*.db

@@ -1,0 +1,33 @@
+rule_id;file;dimension;field;rule;condition;result_if_violated;hypothesis
+CLI-INT-01;clients.csv;Intégrité;id_client;Identifiant client renseigné;id_client non NULL, non vide et non composé uniquement d'espaces;FAIL;Clé primaire candidate
+CLI-INT-02;clients.csv;Intégrité;id_client;Identifiant client unique;une valeur renseignée de id_client n'apparaît qu'une fois;FAIL;Clé primaire candidate
+CLI-INT-03;clients.csv;Intégrité;all_columns;Aucune ligne entièrement dupliquée;aucune autre ligne identique sur toutes les colonnes;FAIL;
+CLI-COM-01;clients.csv;Complétude;prenom|nom|age|ville|code_postal|type_client|date_inscription;Champs obligatoires renseignés;valeur non NULL, non vide et non composée uniquement d'espaces;FAIL;Liste des champs obligatoires à valider par le métier
+CLI-COM-02;clients.csv;Complétude;email|telephone;Coordonnées de contact renseignées;valeur non NULL, non vide et non composée uniquement d'espaces;REVIEW;Un client peut n'avoir qu'un seul moyen de contact
+CLI-VAL-01;clients.csv;Validité;email;Format d'e-mail valide;si renseigné : correspond à [^@\s]+@[^@\s]+\.[^@\s]+;FAIL;Contrôle de structure simple, sans vérification de l'existence de la boîte
+CLI-VAL-02;clients.csv;Validité;telephone;Format de téléphone français valide;si renseigné, après suppression des espaces, points et tirets : 0[1-9] suivi de 8 chiffres ou +33[1-9] suivi de 8 chiffres;FAIL;Clients supposés joignables en France
+CLI-VAL-03;clients.csv;Validité;date_inscription;Date d'inscription valide;si renseignée : format AAAA-MM-JJ et date calendaire existante;FAIL;
+CLI-VAL-04;clients.csv;Validité;age;Âge entier compris entre 0 et 120;si renseigné : nombre entier et 0 <= age <= 120;FAIL;120 ans : borne haute plausible (record humain documenté : 122 ans)
+CLI-VAL-05;clients.csv;Validité;age;Client majeur;si age numérique : age >= 18;REVIEW;Hypothèse : un client inscrit (achat d'alcool, compte professionnel) est majeur
+CLI-VAL-06;clients.csv;Validité;code_postal;Code postal à 5 chiffres;si renseigné : exactement 5 chiffres;FAIL;Adresses françaises uniquement
+CLI-VAL-07;clients.csv;Validité;type_client;Type de client autorisé;si renseigné : Particulier ou Professionnel;FAIL;Liste des modalités observées, à confirmer par le métier
+CLI-COH-01;clients.csv;Cohérence;ville|code_postal;Code postal cohérent avec la ville;si la ville figure dans rules/ref_villes_cp.csv : le code postal fait partie des codes de cette ville;FAIL;Référentiel saisi à partir de la base officielle des codes postaux
+CLI-COH-02;clients.csv;Cohérence;date_inscription;Date d'inscription non future;si date valide : date_inscription <= date d'exécution;FAIL;
+CLI-UNI-01;clients.csv;Unicité;email;E-mail non partagé;si renseigné : l'e-mail normalisé (minuscules, sans espaces autour) n'apparaît qu'une fois;REVIEW;Deux clients peuvent partager une adresse (couple, entreprise)
+CLI-UNI-02;clients.csv;Unicité;prenom|nom;Couple prénom + nom non répété;le couple normalisé (prénom, nom) n'apparaît qu'une fois;REVIEW;Des homonymes sont possibles : signal de doublon d'entité à vérifier
+CLI-OUT-01;clients.csv;Valeurs aberrantes;age;Âge dans les bornes de Tukey;si age numérique : Q1 - 1,5 x IQR <= age <= Q3 + 1,5 x IQR;INFO;Signal statistique, pas une erreur confirmée
+PRD-INT-01;produits.csv;Intégrité;id_produit;Identifiant produit renseigné;id_produit non NULL, non vide et non composé uniquement d'espaces;FAIL;Clé primaire candidate
+PRD-INT-02;produits.csv;Intégrité;id_produit;Identifiant produit unique;une valeur renseignée de id_produit n'apparaît qu'une fois;FAIL;Clé primaire candidate
+PRD-INT-03;produits.csv;Intégrité;all_columns;Aucune ligne entièrement dupliquée;aucune autre ligne identique sur toutes les colonnes;FAIL;
+PRD-COM-01;produits.csv;Complétude;nom_produit|categorie|conditionnement|prix_unitaire_eur|tva_pct|stock_unites|statut_stock|type_fournisseur;Champs obligatoires renseignés;valeur non NULL, non vide et non composée uniquement d'espaces;FAIL;Liste des champs obligatoires à valider par le métier
+PRD-VAL-01;produits.csv;Validité;prix_unitaire_eur;Prix numérique et non négatif;si renseigné : nombre et prix >= 0;REVIEW;Un prix nul est accepté si les produits gratuits sont autorisés
+PRD-VAL-02;produits.csv;Validité;tva_pct;Taux de TVA légal;si renseigné : taux dans {2.1, 5.5, 10, 20};FAIL;Taux en vigueur en France métropolitaine (CGI)
+PRD-VAL-03;produits.csv;Validité;stock_unites;Stock entier et non négatif;si renseigné : nombre entier et stock >= 0;REVIEW;Les stocks négatifs ne sont pas autorisés
+PRD-VAL-04;produits.csv;Validité;statut_stock;Statut de stock autorisé;si renseigné : En stock ou Stock faible;FAIL;Liste des modalités observées, à confirmer par le métier
+PRD-COH-01;produits.csv;Cohérence;stock_unites|statut_stock;Produit sans stock non déclaré disponible;si stock numérique : stock <= 0 interdit avec le statut En stock ou Stock faible;FAIL;Un produit sans unité disponible ne peut pas être en stock
+PRD-COH-02;produits.csv;Cohérence;stock_unites|statut_stock;Statut conforme au seuil de stock faible;si stock > 0 : Stock faible si et seulement si stock < 20;REVIEW;Seuil hypothétique de 20 unités, à fixer par le métier
+PRD-EXA-01;produits.csv;Exactitude;tva_pct;Boisson sans alcool au taux réduit;si nom_produit contient « sans alcool » : tva_pct différent de 20;REVIEW;Boissons non alcoolisées au taux de 5,5 % : à confirmer par le service comptable
+PRD-EXA-02;produits.csv;Exactitude;tva_pct;Carte cadeau sans TVA à l'émission;si categorie = Cartes cadeaux : tva_pct vide ou nul;REVIEW;Bon à usages multiples non soumis à TVA à l'émission : à confirmer par le service comptable
+PRD-UNI-01;produits.csv;Unicité;nom_produit|conditionnement;Couple nom + conditionnement non répété;le couple normalisé (nom_produit, conditionnement) n'apparaît qu'une fois;REVIEW;Un même produit ne devrait figurer qu'une fois par conditionnement
+PRD-OUT-01;produits.csv;Valeurs aberrantes;prix_unitaire_eur;Prix dans les bornes de Tukey;si prix numérique : Q1 - 1,5 x IQR <= prix <= Q3 + 1,5 x IQR;INFO;Signal statistique, pas une erreur confirmée
+PRD-OUT-02;produits.csv;Valeurs aberrantes;stock_unites;Stock dans les bornes de Tukey;si stock numérique : Q1 - 1,5 x IQR <= stock <= Q3 + 1,5 x IQR;INFO;Signal statistique, pas une erreur confirmée
