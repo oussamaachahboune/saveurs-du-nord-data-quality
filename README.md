@@ -12,7 +12,7 @@ L'objectif est de profiler les données, de distinguer les violations d'intégri
 | 3 | Audit des dimensions de qualité | [`notebooks/03_quality_dimensions.ipynb`](notebooks/03_quality_dimensions.ipynb), [`outputs/anomalies.csv`](outputs/anomalies.csv) |
 | 4 | Mise en œuvre SQL (SQLite) | [`sql/`](sql/), [`outputs/sql_results.txt`](outputs/sql_results.txt) |
 | 5 | Mise en œuvre Python / Pandas | [`notebooks/04_python_audit.ipynb`](notebooks/04_python_audit.ipynb), [`outputs/figures/`](outputs/figures/), [`outputs/correction_proposals.csv`](outputs/correction_proposals.csv) |
-| 6 | Tableau de bord (Streamlit) | à venir |
+| 6 | Tableau de bord (Streamlit) | [`dashboard/`](dashboard/) |
 | 7 | Rapport d'audit final | à venir |
 
 ## Structure
@@ -25,6 +25,7 @@ rules/
   ref_villes_cp.csv  Référentiel ville / code postal utilisé par CLI-COH-01
 src/dq.py            Chargement des données et fonctions de contrôle partagées
 sql/                 Import SQLite et requêtes SQL commentées (01 à 07)
+dashboard/           Tableau de bord Streamlit (app.py, pages dans views/)
 outputs/             Résultats exportés (CSV, graphiques)
 ```
 
@@ -84,3 +85,36 @@ Après l'import, les scripts peuvent aussi être exécutés avec la ligne de com
 | `05_statistics.sql` | Statistiques des âges et des prix, analyse par catégorie |
 | `06_quality_summary.sql` | Vues de synthèse des indicateurs de qualité |
 | `07_sql_vs_python.sql` | Comparaison avec Python et explication des écarts possibles |
+
+### Tableau de bord
+
+```bash
+uv run streamlit run dashboard/app.py
+```
+
+Le tableau de bord s'ouvre dans le navigateur (`http://localhost:8501`). Il lit uniquement les fichiers de `outputs/` produits par les notebooks 03 et 04 et n'applique aucune règle lui-même : ses chiffres sont donc ceux de Python, eux-mêmes identiques à ceux de SQL.
+Streamlit a été retenu pour que le tableau de bord soit versionné et reproductible comme le reste du code.
+
+| Page | Contenu |
+|---|---|
+| Vue d'ensemble | Constats principaux en bref, volumes, règles exécutées et en échec, anomalies par niveau de certitude, indicateurs par fichier, anomalies certaines à traiter en priorité et contrôle de concordance avec SQL |
+| Intégrité | Identifiants répétés et corrections proposées, identifiants manquants, lignes dupliquées et doublons d'entités |
+| Qualité | Champs incomplets, anomalies par dimension et par champ, résultat de chaque règle et détail des anomalies, téléchargeable en CSV |
+| Statistiques métier | Âge des clients (moyenne, médiane, âges à investiguer) et indicateurs du catalogue par catégorie |
+
+Les pages Intégrité, Qualité et Statistiques métier proposent des filtres par fichier, dimension, champ ou catégorie.
+La barre latérale affiche sur chaque page la date d'exécution de l'audit, la version des fichiers analysés et un rappel : une valeur extrême doit être investiguée avant d'être considérée comme une erreur.
+
+Le contrôle de concordance interroge la base SQLite locale si elle existe ; sinon, il lit le bilan enregistré dans `outputs/sql_results.txt`.
+Pour un déploiement, [`dashboard/requirements.txt`](dashboard/requirements.txt) ne contient que les dépendances du tableau de bord.
+
+**Indicateurs :**
+
+| Indicateur | Définition |
+|---|---|
+| Règles en échec | Règles violées par au moins une ligne |
+| Anomalies certaines / probables / signaux | Nombre de signalements `FAIL`, `REVIEW` et `INFO` dans la table de suivi |
+| Complétude | Valeurs renseignées (ni NULL, ni vides, ni espaces) / valeurs attendues |
+| Clés dupliquées | Identifiants utilisés par plusieurs lignes |
+| Lignes sans anomalie | Lignes qui ne violent aucune règle `FAIL` ou `REVIEW` |
+| Version du fichier | 12 premiers caractères de l'empreinte SHA-256 du fichier brut |
