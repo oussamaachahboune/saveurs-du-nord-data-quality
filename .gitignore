@@ -9,7 +9,5 @@ wheels/
 # Virtual environments
 .venv
 
-# Datasets
-data/
 # Generated database
 *.db

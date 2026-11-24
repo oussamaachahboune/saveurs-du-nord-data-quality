@@ -1,0 +1,11 @@
+﻿id_client;prenom;nom;age;email;telephone;ville;code_postal;type_client;date_inscription;entreprise_exemple
+CLI001;Camille;Leroy;29;camille.leroy@example.com;06 12 34 50 01;Lille;59000;Particulier;2025-02-14;Les Saveurs du Nord (entreprise fictive)
+CLI001;Thomas;Dubois;41;thomas.dubois@example.com;06 12 34 50 02;Roubaix;59100;Professionnel;2024-11-06;Les Saveurs du Nord (entreprise fictive)
+CLI003;Inès;Moreau;34;;06 12 34 50 03;Tourcoing;59200;Particulier;2025-05-22;Les Saveurs du Nord (entreprise fictive)
+CLI004;Hugo;Petit;46;hugo.petit@@example;06 12 34 50 04;Villeneuve-d'Ascq;59650;Professionnel;2024-09-18;Les Saveurs du Nord (entreprise fictive)
+CLI005;Sarah;Rousseau;150;sarah.rousseau@example.com;06 12 34 50 05;Lambersart;59130;Particulier;2025-01-09;Les Saveurs du Nord (entreprise fictive)
+CLI006;Mehdi;Fournier;38;mehdi.fournier@example.com;06 12;Marcq-en-Barœul;59700;Professionnel;2025-03-30;Les Saveurs du Nord (entreprise fictive)
+CLI007;Élodie;Girard;172;elodie.girard@example.com;06 12 34 50 07;Armentières;59280;Particulier;2024-12-12;Les Saveurs du Nord (entreprise fictive)
+CLI008;Nicolas;Bonnet;44;nicolas.bonnet@example.com;06 12 34 50 08;Lens;75001;Professionnel;2025-06-03;Les Saveurs du Nord (entreprise fictive)
+CLI009;Yasmine;Lambert;0;yasmine.lambert@example.com;06 12 34 50 09;Douai;59500;Particulier;2025-04-17;Les Saveurs du Nord (entreprise fictive)
+CLI010;Antoine;Fontaine;49;antoine.fontaine@example.com;06 12 34 50 10;Arras;62000;Professionnel;2024-10-25;Les Saveurs du Nord (entreprise fictive)
